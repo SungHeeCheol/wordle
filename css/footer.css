@@ -11,7 +11,7 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
 }
 
 .keyboard-column {
@@ -24,6 +24,7 @@ footer {
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 .wide {
