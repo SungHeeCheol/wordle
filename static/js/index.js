@@ -1,11 +1,9 @@
-const 정답 = "APPLE";
-
 let attempts = 0;
 let index = 0;
 let timer;
 
 function appStart() {
-  //게임오버 시 메시지 출력
+  // 게임오버 시 메시지 출력
   const displayGameOver = () => {
     const div = document.createElement("div");
     div.innerText = "정답입니다!!!";
@@ -14,14 +12,14 @@ function appStart() {
     document.body.appendChild(div);
   };
 
-  //게임오버 함수
+  // 게임오버 함수
   const gameOver = () => {
     window.removeEventListener("keydown", handleKeydown); //게임 오버하면 이벤트 리스너를 지움
     displayGameOver();
     clearInterval(timer);
   };
 
-  //알파벳 5개 입력 후 엔터키 누르면 다음 줄로 이동하는 함수
+  // 알파벳 5개 입력 후 엔터키 누르면 다음 줄로 이동하는 함수
   const nextLine = () => {
     if (attempts === 6) {
       return gameOver();
@@ -30,9 +28,14 @@ function appStart() {
     index = 0;
   };
 
-  //엔터키 누를 때 함수
-  const handleEnterKey = () => {
+  // 엔터키 누를 때 함수
+  const handleEnterKey = async () => {
     let 맞은_갯수 = 0;
+
+    // 서버에서 정답을 받아오는 코드
+    const 응답 = await fetch("/answer");
+    const 정답_객체 = await 응답.json();
+    const 정답 = 정답_객체.answer;
 
     for (let i = 0; i < 5; i++) {
       const block = document.querySelector(
@@ -58,7 +61,7 @@ function appStart() {
     }
   };
 
-  //백스페이스 함수
+  // 백스페이스 함수
   const handleBackspace = () => {
     if (index > 0) {
       const preBlock = document.querySelector(
@@ -72,7 +75,7 @@ function appStart() {
     }
   };
 
-  //키 입력 시 함수
+  // 키 입력 시 함수
   const handleKeydown = (event) => {
     const key = event.key.toUpperCase();
     const keyCode = event.keyCode;
@@ -92,7 +95,7 @@ function appStart() {
     }
   };
 
-  //타이머 작성
+  // 타이머 작성
   const StartTimer = () => {
     const 시작_시간 = new Date();
 
