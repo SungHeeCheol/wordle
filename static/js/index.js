@@ -1,9 +1,10 @@
+// 변수 선언
 let attempts = 0;
 let index = 0;
 let timer;
 
 function appStart() {
-  // 게임오버 시 메시지 출력
+  // 게임오버 시 displayGameOver함수로 메시지 출력
   const displayGameOver = () => {
     const div = document.createElement("div");
     div.innerText = "정답입니다!!!";
@@ -12,14 +13,15 @@ function appStart() {
     document.body.appendChild(div);
   };
 
-  // 게임오버 함수
+  // 게임이 끝났을때 gameOver함수
   const gameOver = () => {
-    window.removeEventListener("keydown", handleKeydown); //게임 오버하면 이벤트 리스너를 지움
+    window.removeEventListener("keydown", handleKeydown);
     displayGameOver();
     clearInterval(timer);
   };
 
-  // 알파벳 5개 입력 후 엔터키 누르면 다음 줄로 이동하는 함수
+  // 알파벳 5개 입력 후 엔터키 누르면 다음 줄로 이동하는 nextLine함수
+  // attempts가 6이면 gameOver함수호출하고 아니면 attempts에 1을 올려준 후 index에 0을 넣는다.
   const nextLine = () => {
     if (attempts === 6) {
       return gameOver();
@@ -63,6 +65,7 @@ function appStart() {
 
   // 백스페이스 함수
   const handleBackspace = () => {
+    // index가 0보다 클때만 board-columm의 index-1의 텍스트를 공백으로 바꾼다.
     if (index > 0) {
       const preBlock = document.querySelector(
         `.board-columm[data-index='${attempts}${index - 1}']`
@@ -77,9 +80,11 @@ function appStart() {
 
   // 키 입력 시 함수
   const handleKeydown = (event) => {
+    //event변수의 key를 대문자로 호출
     const key = event.key.toUpperCase();
     const keyCode = event.keyCode;
 
+    // board-columm의 data-index요소를 attempts, index순으로 맞는 것을 호출
     const thisBlock = document.querySelector(
       `.board-columm[data-index='${attempts}${index}']`
     );
@@ -87,9 +92,11 @@ function appStart() {
     if (event.key === "Backspace") {
       handleBackspace();
     } else if (index === 5) {
+      // 인덱스가 5일 때 엔더키가 눌리면 handleEnterKey함수를 호출하고 아니면 리턴
       if (event.key === "Enter") handleEnterKey();
       else return;
     } else if (keyCode >= 65 && keyCode <= 90) {
+      // 키보드를 눌렸을 때 키코드가 영문자라면 board-columm의 data-index의 index값을 1 늘린다.
       thisBlock.innerText = key;
       index = index + 1;
     }
@@ -102,16 +109,19 @@ function appStart() {
     function setTime() {
       const 현재_시간 = new Date();
       const 흐른_시간 = new Date(현재_시간 - 시작_시간);
-      const 분 = 흐른_시간.getMinutes().toString().padStart(2, "0");
-      const 초 = 흐른_시간.getSeconds().toString().padStart(2, "0");
+      const 분 = 흐른_시간.getMinutes().toString();
+      const 초 = 흐른_시간.getSeconds().toString();
       const timeDiv = document.querySelector("#timer");
-      timeDiv.innerText = `${분}:${초}`;
+      timeDiv.innerText = `${분}.padStart(2, "0");:${초}.padStart(2, "0");`;
     }
 
     timer = setInterval(setTime, 1000);
   };
 
+  // 타이머 실행
   StartTimer();
+
+  // 키다운했을때 handleKeydown함수 실행
   window.addEventListener("keydown", handleKeydown);
 }
 
