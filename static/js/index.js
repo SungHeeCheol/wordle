@@ -3,6 +3,8 @@ let attempts = 0;
 let index = 0;
 let timer;
 
+let 정답 = "APPLE";
+
 function appStart() {
   // 게임오버 시 displayGameOver함수로 메시지 출력
   const displayGameOver = () => {
@@ -34,10 +36,10 @@ function appStart() {
   const handleEnterKey = async () => {
     let 맞은_갯수 = 0;
 
-    // 서버에서 정답을 받아오는 코드
-    const 응답 = await fetch("/answer");
-    const 정답_객체 = await 응답.json();
-    const 정답 = 정답_객체.answer;
+    // // 서버에서 정답을 받아오는 코드
+    // const 응답 = await fetch("/answer");
+    // const 정답_객체 = await 응답.json();
+    // const 정답 = 정답_객체.answer;
     const animation_duration = 500;
 
     for (let i = 0; i < 5; i++) {
@@ -68,6 +70,7 @@ function appStart() {
       }
       block.classList.add("animated");
       block.style.animationDelay = `${(i * animation_duration) / 2}ms`;
+      block.style.borderColor = "black";
       block.style.color = "white";
     }
 
@@ -117,6 +120,26 @@ function appStart() {
     }
   };
 
+  // 키보드 클릭 시
+  const handleKeyClick = (keyName) => {
+    const thisBlock = document.querySelector(
+      `.board-columm[data-index='${attempts}${index}']`
+    );
+
+    console.log(keyName);
+    if (keyName === "BACKSPACE") {
+      handleBackspace();
+    } else if (index === 5) {
+      if (keyName === "ENTER") handleEnterKey();
+      else return;
+    } else if (keyName !== "BACKSPACE" && keyName !== "ENTER") {
+      // 키보드를 눌렸을 때 키코드가 영문자라면 board-columm의 data-index의 index값을 1늘린다.
+      thisBlock.innerText = keyName;
+      thisBlock.style.borderColor = "black";
+      index = index + 1;
+    }
+  };
+
   // 타이머 작성
   const StartTimer = () => {
     const 시작_시간 = new Date();
@@ -138,6 +161,16 @@ function appStart() {
 
   // 키다운했을때 handleKeydown함수 실행
   window.addEventListener("keydown", handleKeydown);
+
+  // 키보드 클릭 이벤트
+  const all_key = document.querySelectorAll(".keyboard-column");
+
+  for (let kb of all_key) {
+    let keyName = kb.getAttribute("data-key");
+    kb.addEventListener("click", () => {
+      handleKeyClick(keyName);
+    });
+  }
 }
 
 appStart();
