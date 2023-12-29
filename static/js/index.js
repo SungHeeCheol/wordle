@@ -47,13 +47,25 @@ function appStart() {
       const 입력한_글자 = block.innerText;
       const 정답_글자 = 정답[i];
 
+      /* Keyboard 요소 선택 */
+      const keyboardBlock = document.querySelector(
+        `.keyboard-column[data-key="${입력한_글자}"]`
+      );
+
       if (입력한_글자 === 정답_글자) {
         맞은_갯수 += 1;
         block.style.background = "#6AAA64";
+        /* 키보드 색 바꾸기 */
+        keyboardBlock.style.backgroundColor = "#6aaa64";
       } else if (정답.includes(입력한_글자)) {
         block.style.background = "#C9B458";
-      } else block.style.background = "#787C7E";
-
+        /* 키보드 색 바꾸기 */
+        keyboardBlock.style.backgroundColor = "#c9b458";
+      } else {
+        block.style.background = "#787C7E";
+        /* 키보드 색 바꾸기 */
+        keyboardBlock.style.backgroundColor = "#787c7e";
+      }
       block.classList.add("animated");
       block.style.animationDelay = `${(i * animation_duration) / 2}ms`;
       block.style.color = "white";
