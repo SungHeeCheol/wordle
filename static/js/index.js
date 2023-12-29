@@ -38,6 +38,7 @@ function appStart() {
     const 응답 = await fetch("/answer");
     const 정답_객체 = await 응답.json();
     const 정답 = 정답_객체.answer;
+    const animation_duration = 500;
 
     for (let i = 0; i < 5; i++) {
       const block = document.querySelector(
@@ -53,6 +54,8 @@ function appStart() {
         block.style.background = "#C9B458";
       } else block.style.background = "#787C7E";
 
+      block.classList.add("animated");
+      block.style.animationDelay = `${(i * animation_duration) / 2}ms`;
       block.style.color = "white";
     }
 
@@ -112,7 +115,7 @@ function appStart() {
       const 분 = 흐른_시간.getMinutes().toString();
       const 초 = 흐른_시간.getSeconds().toString();
       const timeDiv = document.querySelector("#timer");
-      timeDiv.innerText = `${분}.padStart(2, "0");:${초}.padStart(2, "0");`;
+      timeDiv.innerText = `${분.padStart(2, "0")}:${초.padStart(2, "0")}`;
     }
 
     timer = setInterval(setTime, 1000);
